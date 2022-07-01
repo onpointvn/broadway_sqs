@@ -59,7 +59,19 @@ defmodule BroadwaySQS.ExAwsClient do
 
     ack_options.queue_url
     |> ExAws.SQS.delete_message_batch(receipts)
-    |> ExAws.request!(ack_options.config)
+    |> ExAws.request(ack_options.config)
+    |> case do
+      {:ok, result} ->
+        result
+
+      error ->
+        Logger.error(inspect(messages))
+
+        raise ExAws.Error, """
+        ExAws Request Error!
+        #{inspect(error)}
+        """
+    end
   end
 
   defp wrap_received_messages({:ok, %{body: body}}, ack_ref) do
