@@ -65,7 +65,7 @@ defmodule BroadwaySQS.ExAwsClient do
         result
 
       error ->
-        Logger.error(inspect(messages))
+        Logger.error("aws_sqs_message: " <> inspect(messages))
 
         raise ExAws.Error, """
         ExAws Request Error!
